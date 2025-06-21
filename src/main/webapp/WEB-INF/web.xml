@@ -1,7 +1,24 @@
-<!DOCTYPE web-app PUBLIC
- "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
- "http://java.sun.com/dtd/web-app_2_3.dtd" >
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app
+	version="4.0"
+	xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xmlns:javaee="http://xmlns.jcp.org/xml/ns/javaee"
+	xmlns:xml="http://www.w3.org/XML/1998/namespace"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd">
+	<display-name>Archetype Created Web Application</display-name>
 
-<web-app>
-  <display-name>Archetype Created Web Application</display-name>
+
+	<!-- JSP页面的配置信息 -->
+	<jsp-config>
+		<jsp-property-group>
+			<url-pattern>/*</url-pattern>
+			<!-- EL表达式是否忽略: true忽略 false不忽略 -->
+			<el-ignored>false</el-ignored>
+			<!-- JSP页面上的java代码是否有效: true: 无效 false:有效 -->
+			<scripting-invalid>false</scripting-invalid>
+			<!-- 在拦截到的所有jsp页面前面引入该页面 -->
+			<include-prelude>/taglib.jsp</include-prelude>
+		</jsp-property-group>
+	</jsp-config>
 </web-app>
