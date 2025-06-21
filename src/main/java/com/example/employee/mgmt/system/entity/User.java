@@ -26,11 +26,11 @@ public class User {
         this.lastLoginTime = lastLoginTime;
     }
 
-    public Long getId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setId(Long id) {
+    public void setUserId(Long id) {
         this.userId = id;
     }
 
