@@ -10,25 +10,25 @@ public class EmployeeDao extends BaseDao {
 
 	public Employee findById(Long id) {
 		BeanPropertyRowMapper<Employee> rowMapper = new BeanPropertyRowMapper<>(Employee.class);
-		String sql = "SELECT * FROM employee WHERE id = ?";
+		String sql = "SELECT * FROM employees WHERE id = ? LIMIT 1";
 		return jdbcTemplate.queryForObject(sql, rowMapper, id);
 	}
 
 	public List<Employee> findBySex(Employee.EmployeeSex sex) {
 		BeanPropertyRowMapper<Employee> rowMapper = new BeanPropertyRowMapper<>(Employee.class);
-		String sql = "SELECT * FROM employee WHERE sex = ?";
+		String sql = "SELECT * FROM employees WHERE sex = ?";
 		return jdbcTemplate.query(sql, rowMapper, sex.toString());
 	}
 
 	public Employee findByDeptId(Long deptId) {
 		BeanPropertyRowMapper<Employee> rowMapper = new BeanPropertyRowMapper<>(Employee.class);
-		String sql = "SELECT * FROM employee WHERE dept_id = ?";
+		String sql = "SELECT * FROM employees WHERE dept_id = ?";
 		return jdbcTemplate.queryForObject(sql, rowMapper, deptId);
 	}
 
 	public Employee findByPhone(String phone) {
 		BeanPropertyRowMapper<Employee> rowMapper = new BeanPropertyRowMapper<>(Employee.class);
-		String sql = "SELECT * FROM employee WHERE phone = ? LIMIT 1";
+		String sql = "SELECT * FROM employees WHERE phone = ? LIMIT 1";
 		return jdbcTemplate.queryForObject(sql, rowMapper, phone);
 	}
 
