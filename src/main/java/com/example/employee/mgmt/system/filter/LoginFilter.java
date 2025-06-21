@@ -39,11 +39,17 @@ public class LoginFilter implements Filter {
 
 		String requestURI = request.getRequestURI();
 
-		if (requestURI.startsWith("/login.jsp") || requestURI.startsWith("/index.jsp")) {
-			// 这些都是不受限资源，直接放行
-			filterChain.doFilter(request, response);
-			return;
+		String[] allowedURIs = {
+				"/login.jsp",
+				"/index.jsp",
+				"/user/login" };
 
+		for (String uri : allowedURIs) {
+			if (requestURI.startsWith(uri)) {
+				// 这些都是不受限资源，直接放行
+				filterChain.doFilter(request, response);
+				return;
+			}
 		}
 
 		// 受限资源，而且还没有登录则跳转登录
