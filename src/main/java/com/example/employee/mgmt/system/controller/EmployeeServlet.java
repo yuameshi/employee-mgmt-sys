@@ -172,6 +172,3 @@ public class EmployeeServlet extends BaseServlet {
 		// 设置部门列表
 		List<Department> depts = departmentService.getAllDepartments();
 		request.setAttribute("depts", depts);
-		request.getRequestDispatcher("/employeeList.jsp").forward(request, response);
-	}
-}
