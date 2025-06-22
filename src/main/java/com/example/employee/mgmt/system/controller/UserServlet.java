@@ -37,7 +37,7 @@ public class UserServlet extends BaseServlet {
 			// 更新最后登录时间
 			userService.updateLastLoginTime(user.getUserId());
 			// 进入员工列表页
-			response.sendRedirect("/employeeList.jsp");
+			response.sendRedirect("/employee/filter");
 			return;
 		}
 		// 账号或密码错误
