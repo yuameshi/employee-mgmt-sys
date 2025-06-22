@@ -63,7 +63,7 @@
 				</c:forEach>
 			</select>
 			<label for="phone">电话:</label>
-			<input type="text" id="phone" name="phone" />
+			<input type="text" id="phone" placeholder="此选项将忽略前方两个选项" name="phone" />
 			<button type="submit">筛选</button>
 		</form>
 		<table>
@@ -78,22 +78,29 @@
 				</tr>
 			</thead>
 			<tbody>
-                <c:forEach items="${employees}" var="user">
-                    <tr>
-                        <th scope="row">${user.id}</th>
-						<td>${user.name}</td>
-						<td>${user.gender=="MALE"?"男":"女"}</td>
-						<td>
-							<c:forEach items="${depts}" var="dept">
-								<c:if test="${dept.deptId == user.dept}">
-									${dept.name}
-								</c:if>
-							</c:forEach>
-						</td>
-						<td>${user.phone}</td>
-						<td><a href="/employee/getById?id=${user.id}">查看详情</a></td>
-                    </tr>
-                </c:forEach>
+				<c:if test="${isEmpty==true}">
+					<tr>
+						<td colspan="6" style="text-align: center;">没有找到符合条件的员工</td>
+					</tr>
+				</c:if>
+				<c:if test="${isEmpty==false}">
+                	<c:forEach items="${employees}" var="user">
+                	    <tr>
+                	        <th scope="row">${user.id}</th>
+							<td>${user.name}</td>
+							<td>${user.gender=="MALE"?"男":"女"}</td>
+							<td>
+								<c:forEach items="${depts}" var="dept">
+									<c:if test="${dept.deptId == user.dept}">
+										${dept.name}
+									</c:if>
+								</c:forEach>
+							</td>
+							<td>${user.phone}</td>
+							<td><a href="/employee/getById?id=${user.id}">查看详情</a></td>
+                	    </tr>
+                	</c:forEach>
+				</c:if>
 			</tbody>
 		</table>
 	</body>

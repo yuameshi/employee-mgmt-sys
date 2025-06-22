@@ -81,6 +81,8 @@ public class EmployeeServlet extends BaseServlet {
 				&& (gender == null || gender.isEmpty())) {
 			List<Employee> employees = employeeService.getAllEmployees();
 			request.setAttribute("employees", employees);
+			// 设置isEmpty为false表示有员工
+			request.setAttribute("isEmpty", false);
 			request.getRequestDispatcher("/employeeList.jsp").forward(request, response);
 			return;
 		}
@@ -96,14 +98,23 @@ public class EmployeeServlet extends BaseServlet {
 			response.sendRedirect("/employee/getById?id=" + employee.getId());
 			return;
 		}
-		// 初始化三个ArrayList
-		ArrayList<Long> employeeIdFilteredByGender = new ArrayList<Long>();
-		ArrayList<Long> employeeIdFilteredByName = new ArrayList<Long>();
-		ArrayList<Long> employeeIdFilteredByDepartment = new ArrayList<Long>();
+		// 初始化三个ArrayList为null（有对应查询条件时才会被赋值）
+		// 用于存储过滤后的员工ID
+		ArrayList<Long> employeeIdFilteredByGender = null;
+		ArrayList<Long> employeeIdFilteredByName = null;
+		ArrayList<Long> employeeIdFilteredByDepartment = null;
 
-		// 若有性别则查询性别并转成id array
+		// 若有性别筛选则查询性别并转成id array
 		if (gender != null && !gender.isEmpty()) {
 			List<Employee> employeesFilteredByGender = employeeService.findByGender(gender);
+			if (employeesFilteredByGender == null || employeesFilteredByGender.isEmpty()) {
+				// 如果没有找到符合性别的员工，则直接返回空结果（后面再怎么交集也是空）
+				// 不再赋值筛选器选项（重置筛选器）
+				request.setAttribute("isEmpty", true);
+				request.getRequestDispatcher("/employeeList.jsp").forward(request, response);
+				return;
+			}
+			employeeIdFilteredByGender = new ArrayList<Long>();
 			for (Employee employee : employeesFilteredByGender) {
 				employeeIdFilteredByGender.add(employee.getId());
 			}
@@ -112,6 +123,13 @@ public class EmployeeServlet extends BaseServlet {
 		// 若有名字则查询名字，同上操作
 		if (name != null && !name.isEmpty()) {
 			List<Employee> employeesFilteredByName = employeeService.findByName(name);
+			if (employeesFilteredByName == null || employeesFilteredByName.isEmpty()) {
+				// 如果没有找到符合名字的员工，则直接返回空结果（同上）
+				request.setAttribute("isEmpty", true);
+				request.getRequestDispatcher("/employeeList.jsp").forward(request, response);
+				return;
+			}
+			employeeIdFilteredByName = new ArrayList<Long>();
 			for (Employee employee : employeesFilteredByName) {
 				if (employee.getName() != null && employee.getName().contains(name)) {
 					employeeIdFilteredByName.add(employee.getId());
@@ -122,39 +140,49 @@ public class EmployeeServlet extends BaseServlet {
 		// 若有部门则查询部门，同上操作
 		if (deptId != null && !deptId.isEmpty()) {
 			List<Employee> employeesFilteredByDept = employeeService.findByDeptId(Long.parseLong(deptId));
+			if (employeesFilteredByDept == null || employeesFilteredByDept.isEmpty()) {
+				// 如果没有找到符合部门的员工，则直接返回空结果（同上）
+				request.setAttribute("isEmpty", true);
+				request.getRequestDispatcher("/employeeList.jsp").forward(request, response);
+				return;
+			}
+			employeeIdFilteredByDepartment = new ArrayList<Long>();
 			for (Employee employee : employeesFilteredByDept) {
 				employeeIdFilteredByDepartment.add(employee.getId());
 			}
 		}
 
-		// 求交集（使用 retainAll）
-		if (employeeIdFilteredByDepartment.isEmpty() && employeeIdFilteredByGender.isEmpty()
-				&& employeeIdFilteredByName.isEmpty()) {
-			request.setAttribute("msg", "未找到符合条件的员工信息，请检查查询条件");
-			request.getRequestDispatcher("/404.jsp").forward(request, response);
-			return;
-		}
-		ArrayList<Long> employeeIdFiltered;
+		ArrayList<Long> employeeIdFiltered = null;
 
+		// 求交集（使用 retainAll）
 		// 先获取一个非空的集作为基础集
-		if (!employeeIdFilteredByGender.isEmpty()) {
+		// 因为其中有筛选不出来的 或者 没有此条件的情况下就是 null
+		// 因此不判断isEmpty
+		if (employeeIdFilteredByGender != null) {
 			employeeIdFiltered = new ArrayList<>(employeeIdFilteredByGender);
-		} else if (!employeeIdFilteredByDepartment.isEmpty()) {
+		} else if (employeeIdFilteredByDepartment != null) {
 			employeeIdFiltered = new ArrayList<>(employeeIdFilteredByDepartment);
 		} else {
 			employeeIdFiltered = new ArrayList<>(employeeIdFilteredByName);
 		}
 		// 然后与其他集合求交集
-		if (!employeeIdFilteredByDepartment.isEmpty()) {
+		// 只有有该筛选条件（不为null）才会进行交集操作
+		if (employeeIdFilteredByDepartment != null) {
 			employeeIdFiltered.retainAll(employeeIdFilteredByDepartment);
 		}
-		if (!employeeIdFilteredByName.isEmpty()) {
+		if (employeeIdFilteredByName != null) {
 			employeeIdFiltered.retainAll(employeeIdFilteredByName);
 		}
-		if (!employeeIdFilteredByGender.isEmpty()) {
+		if (employeeIdFilteredByGender != null) {
 			employeeIdFiltered.retainAll(employeeIdFilteredByGender);
 		}
-		System.out.println("employeesFiltered: " + JSON.toJSONString(employeeIdFiltered));
+
+		if (employeeIdFiltered.isEmpty()) {
+			// 如果没有找到符合条件的员工，则返回空结果
+			request.setAttribute("isEmpty", true);
+			request.getRequestDispatcher("/employeeList.jsp").forward(request, response);
+			return;
+		}
 
 		// 根据过滤后的ID获取员工信息
 		List<Employee> filteredEmployees = new ArrayList<>();
@@ -167,11 +195,13 @@ public class EmployeeServlet extends BaseServlet {
 
 		// 如果查询到员工则跳转到员工列表页面
 		request.setAttribute("employees", filteredEmployees);
+		// 设置isEmpty为false表示有员工，不用ArrayList.isEmpty()判断
+		request.setAttribute("isEmpty", false);
 		// 设置当前过滤条件
 		request.setAttribute("departmentId", deptId);
 		request.setAttribute("gender", gender);
 		request.setAttribute("name", name);
 		// 不用设置手机因为手机号是直接跳转到详情页的
-		// 设置部门列表
-		List<Department> depts = departmentService.getAllDepartments();
-		request.setAttribute("depts", depts);
+		request.getRequestDispatcher("/employeeList.jsp").forward(request, response);
+	}
+}
