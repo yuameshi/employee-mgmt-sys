@@ -43,18 +43,23 @@
 	<body>
 		<form action="/employee/filter" method="get">
 			<label for="name">姓名:</label>
-			<input type="text" id="name" name="name" />
+			<input type="text" id="name" name="name" value="${name}" />
 			<label for="gender">性别:</label>
-			<select id="gender" name="gender">
+			<select id="gender" name="gender" >
 				<option value="">全部</option>
-				<option value="MALE">男</option>
-				<option value="FEMALE">女</option>
+				<option value="MALE" ${gender.equals("MALE") ? "selected" : ""}>男</option>
+				<option value="FEMALE" ${gender.equals("FEMALE") ? "selected" : ""}>女</option>
 			</select>
 			<label for="department">部门:</label>
 			<select id="department" name="department">
 				<option value="">全部</option>
                 <c:forEach items="${depts}" var="dept">
-					<option value="${dept.deptId}">${dept.name}</option>
+					<c:if test="${dept.deptId == departmentId}">
+						<option value="${dept.deptId}" selected>${dept.name}</option>
+					</c:if>
+					<c:if test="${dept.deptId != departmentId}">
+						<option value="${dept.deptId}">${dept.name}</option>
+					</c:if>
 				</c:forEach>
 			</select>
 			<label for="phone">电话:</label>

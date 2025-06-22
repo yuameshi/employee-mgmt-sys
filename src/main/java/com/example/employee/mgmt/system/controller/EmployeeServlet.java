@@ -66,10 +66,6 @@ public class EmployeeServlet extends BaseServlet {
 
 	public void filter(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
-		// 这个总得写的
-		List<Department> depts = departmentService.getAllDepartments();
-		request.setAttribute("depts", depts);
-
 		Map<String, String> param = getParam(request);
 		String deptId = param.get("department");
 		String name = param.get("name");
@@ -168,6 +164,14 @@ public class EmployeeServlet extends BaseServlet {
 
 		// 如果查询到员工则跳转到员工列表页面
 		request.setAttribute("employees", filteredEmployees);
+		// 设置当前过滤条件
+		request.setAttribute("departmentId", deptId);
+		request.setAttribute("gender", gender);
+		request.setAttribute("name", name);
+		// 不用设置手机因为手机号是直接跳转到详情页的
+		// 设置部门列表
+		List<Department> depts = departmentService.getAllDepartments();
+		request.setAttribute("depts", depts);
 		request.getRequestDispatcher("/employeeList.jsp").forward(request, response);
 	}
 }
