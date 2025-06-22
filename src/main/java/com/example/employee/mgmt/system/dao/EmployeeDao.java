@@ -33,4 +33,23 @@ public class EmployeeDao extends BaseDao {
 			return null;
 		}
 	}
+
+	public List<Employee> findByName(String name) {
+		BeanPropertyRowMapper<Employee> rowMapper = new BeanPropertyRowMapper<>(Employee.class);
+		String sql = "SELECT * FROM employees WHERE name like \"" + ("%" + name + "%") + "\"";
+		System.out.println(sql);
+		return jdbcTemplate.query(sql, rowMapper);
+	}
+
+	public List<Employee> findByGender(String sex) {
+		BeanPropertyRowMapper<Employee> rowMapper = new BeanPropertyRowMapper<>(Employee.class);
+		String sql = "SELECT * FROM employees WHERE gender = \"" + sex + "\"";
+		return jdbcTemplate.query(sql, rowMapper);
+	}
+
+	public List<Employee> findByDeptId(Long deptId) {
+		BeanPropertyRowMapper<Employee> rowMapper = new BeanPropertyRowMapper<>(Employee.class);
+		String sql = "SELECT * FROM employees WHERE dept = ?";
+		return jdbcTemplate.query(sql, rowMapper, deptId);
+	}
 }

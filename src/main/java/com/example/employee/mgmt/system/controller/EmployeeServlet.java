@@ -12,6 +12,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import com.alibaba.fastjson.JSON;
@@ -70,7 +71,7 @@ public class EmployeeServlet extends BaseServlet {
 		request.setAttribute("depts", depts);
 
 		Map<String, String> param = getParam(request);
-		String deptId = param.get("deptId");
+		String deptId = param.get("department");
 		String name = param.get("name");
 		String phone = param.get("phone");
 		String gender = param.get("gender");
@@ -96,9 +97,77 @@ public class EmployeeServlet extends BaseServlet {
 			response.sendRedirect("/employee/getById?id=" + employee.getId());
 			return;
 		}
-		List<Employee> employees = employeeService.getAllEmployees();
+		// 初始化三个ArrayList
+		ArrayList<Long> employeeIdFilteredByGender = new ArrayList<Long>();
+		ArrayList<Long> employeeIdFilteredByName = new ArrayList<Long>();
+		ArrayList<Long> employeeIdFilteredByDepartment = new ArrayList<Long>();
+
+		// 若有性别则查询性别并转成id array
+		if (gender != null && !gender.isEmpty()) {
+			List<Employee> employeesFilteredByGender = employeeService.findByGender(gender);
+			for (Employee employee : employeesFilteredByGender) {
+				employeeIdFilteredByGender.add(employee.getId());
+			}
+		}
+
+		// 若有名字则查询名字，同上操作
+		if (name != null && !name.isEmpty()) {
+			List<Employee> employeesFilteredByName = employeeService.findByName(name);
+			for (Employee employee : employeesFilteredByName) {
+				if (employee.getName() != null && employee.getName().contains(name)) {
+					employeeIdFilteredByName.add(employee.getId());
+				}
+			}
+		}
+
+		// 若有部门则查询部门，同上操作
+		if (deptId != null && !deptId.isEmpty()) {
+			List<Employee> employeesFilteredByDept = employeeService.findByDeptId(Long.parseLong(deptId));
+			for (Employee employee : employeesFilteredByDept) {
+				employeeIdFilteredByDepartment.add(employee.getId());
+			}
+		}
+
+		// 求交集（使用 retainAll）
+		if (employeeIdFilteredByDepartment.isEmpty() && employeeIdFilteredByGender.isEmpty()
+				&& employeeIdFilteredByName.isEmpty()) {
+			request.setAttribute("msg", "未找到符合条件的员工信息，请检查查询条件");
+			request.getRequestDispatcher("/404.jsp").forward(request, response);
+			return;
+		}
+		ArrayList<Long> employeeIdFiltered;
+
+		// 先获取一个非空的集作为基础集
+		if (!employeeIdFilteredByGender.isEmpty()) {
+			employeeIdFiltered = new ArrayList<>(employeeIdFilteredByGender);
+		} else if (!employeeIdFilteredByDepartment.isEmpty()) {
+			employeeIdFiltered = new ArrayList<>(employeeIdFilteredByDepartment);
+		} else {
+			employeeIdFiltered = new ArrayList<>(employeeIdFilteredByName);
+		}
+		// 然后与其他集合求交集
+		if (!employeeIdFilteredByDepartment.isEmpty()) {
+			employeeIdFiltered.retainAll(employeeIdFilteredByDepartment);
+		}
+		if (!employeeIdFilteredByName.isEmpty()) {
+			employeeIdFiltered.retainAll(employeeIdFilteredByName);
+		}
+		if (!employeeIdFilteredByGender.isEmpty()) {
+			employeeIdFiltered.retainAll(employeeIdFilteredByGender);
+		}
+		System.out.println("employeesFiltered: " + JSON.toJSONString(employeeIdFiltered));
+
+		// 根据过滤后的ID获取员工信息
+		List<Employee> filteredEmployees = new ArrayList<>();
+		for (Long id : employeeIdFiltered) {
+			Employee employee = employeeService.findById(id);
+			if (employee != null) {
+				filteredEmployees.add(employee);
+			}
+		}
+
 		// 如果查询到员工则跳转到员工列表页面
-		request.setAttribute("employees", employees);
+		request.setAttribute("employees", filteredEmployees);
 		request.getRequestDispatcher("/employeeList.jsp").forward(request, response);
 	}
 }

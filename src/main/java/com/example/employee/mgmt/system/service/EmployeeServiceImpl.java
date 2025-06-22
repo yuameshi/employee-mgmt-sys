@@ -26,4 +26,19 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public Employee findByPhone(String phone) {
 		return employeeDao.findByPhone(phone);
 	}
+
+	@Override
+	public List<Employee> findByName(String name) {
+		return employeeDao.findByName(name);
+	}
+
+	@Override
+	public List<Employee> findByGender(String sex) {
+		return employeeDao.findByGender(sex);
+	}
+
+	@Override
+	public List<Employee> findByDeptId(Long deptId) {
+		return employeeDao.findByDeptId(deptId);
+	}
 }

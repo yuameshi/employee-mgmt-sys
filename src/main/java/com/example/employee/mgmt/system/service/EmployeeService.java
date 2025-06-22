@@ -10,4 +10,10 @@ public interface EmployeeService {
 	List<Employee> getAllEmployees();
 
 	Employee findByPhone(String phone);
+
+	List<Employee> findByName(String name);
+
+	List<Employee> findByGender(String sex);
+
+	List<Employee> findByDeptId(Long deptId);
 }
