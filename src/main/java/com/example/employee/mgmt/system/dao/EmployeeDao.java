@@ -26,7 +26,11 @@ public class EmployeeDao extends BaseDao {
 
 	public Employee findByPhone(String phone) {
 		BeanPropertyRowMapper<Employee> rowMapper = new BeanPropertyRowMapper<>(Employee.class);
-		String sql = "SELECT * FROM employees WHERE phone = ? LIMIT 1";
-		return jdbcTemplate.queryForObject(sql, rowMapper, phone);
+		try {
+			String sql = "SELECT * FROM employees WHERE phone = ? LIMIT 1";
+			return jdbcTemplate.queryForObject(sql, rowMapper, phone);
+		} catch (Exception e) {
+			return null;
+		}
 	}
 }
