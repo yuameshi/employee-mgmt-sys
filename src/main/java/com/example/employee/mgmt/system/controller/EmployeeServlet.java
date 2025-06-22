@@ -62,4 +62,43 @@ public class EmployeeServlet extends BaseServlet {
 			response.getWriter().write(json);
 		}
 	}
+
+	public void filter(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
+		// 这个总得写的
+		List<Department> depts = departmentService.getAllDepartments();
+		request.setAttribute("depts", depts);
+
+		Map<String, String> param = getParam(request);
+		String deptId = param.get("deptId");
+		String name = param.get("name");
+		String phone = param.get("phone");
+		String gender = param.get("gender");
+		// 若没有任何条件则查询全部
+		if ((deptId == null || deptId.isEmpty())
+				&& (name == null || name.isEmpty())
+				&& (phone == null || phone.isEmpty())
+				&& (gender == null || gender.isEmpty())) {
+			List<Employee> employees = employeeService.getAllEmployees();
+			request.setAttribute("employees", employees);
+			request.getRequestDispatcher("/employeeList.jsp").forward(request, response);
+			return;
+		}
+		// 若只有手机号则查询手机号
+		if (phone != null && !phone.isEmpty()) {
+			Employee employee = employeeService.findByPhone(phone);
+			if (employee == null) {
+				// 没找到去一个特定页面必会404的
+				response.sendRedirect("/employee/getById?id=-1");
+				return;
+			}
+			// 找到则直接跳转详情页
+			response.sendRedirect("/employee/getById?id=" + employee.getId());
+			return;
+		}
+		List<Employee> employees = employeeService.getAllEmployees();
+		// 如果查询到员工则跳转到员工列表页面
+		request.setAttribute("employees", employees);
+		request.getRequestDispatcher("/employeeList.jsp").forward(request, response);
+	}
 }

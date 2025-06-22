@@ -18,16 +18,10 @@ public class EmployeeDao extends BaseDao {
 		}
 	}
 
-	public List<Employee> findBySex(Employee.EmployeeSex sex) {
+	public List<Employee> getAllEmployees() {
 		BeanPropertyRowMapper<Employee> rowMapper = new BeanPropertyRowMapper<>(Employee.class);
-		String sql = "SELECT * FROM employees WHERE sex = ?";
-		return jdbcTemplate.query(sql, rowMapper, sex.toString());
-	}
-
-	public Employee findByDeptId(Long deptId) {
-		BeanPropertyRowMapper<Employee> rowMapper = new BeanPropertyRowMapper<>(Employee.class);
-		String sql = "SELECT * FROM employees WHERE dept = ?";
-		return jdbcTemplate.queryForObject(sql, rowMapper, deptId);
+		String sql = "SELECT * FROM employees";
+		return jdbcTemplate.query(sql, rowMapper);
 	}
 
 	public Employee findByPhone(String phone) {
@@ -35,5 +29,4 @@ public class EmployeeDao extends BaseDao {
 		String sql = "SELECT * FROM employees WHERE phone = ? LIMIT 1";
 		return jdbcTemplate.queryForObject(sql, rowMapper, phone);
 	}
-
 }
