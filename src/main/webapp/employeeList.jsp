@@ -1,0 +1,87 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>员工列表</title>
+		<style>
+			body {
+				font-family: Arial, sans-serif;
+				margin: 20px;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+			}
+			form {
+				margin-bottom: 20px;
+			}
+			label {
+				margin-right: 10px;
+			}
+			input,
+			select {
+				margin-right: 10px;
+			}
+			table {
+				width: 50%;
+				min-width: 500px;
+				border-collapse: collapse;
+			}
+			th,
+			td {
+				padding: 8px;
+				text-align: left;
+				border-bottom: 1px solid #ddd;
+			}
+			th {
+				background-color: #f2f2f2;
+			}
+		</style>
+	</head>
+	<body>
+		<form action="/employee/filter" method="get">
+			<label for="name">姓名:</label>
+			<input type="text" id="name" name="name" />
+			<label for="gender">性别:</label>
+			<select id="gender" name="gender">
+				<option value="">全部</option>
+				<option value="MALE">男</option>
+				<option value="FEMALE">女</option>
+			</select>
+			<label for="department">部门:</label>
+			<select id="department" name="department">
+                <c:forEach items="${depts}" var="dept">
+					<option value="${dept.deptId}">${dept.name}</option>
+				</c:forEach>
+			</select>
+			<label for="phone">电话:</label>
+			<input type="text" id="phone" name="phone" />
+			<button type="submit">筛选</button>
+		</form>
+		<table>
+			<thead>
+				<tr>
+					<th>姓名</th>
+					<th>性别</th>
+					<th>部门</th>
+					<th>电话</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+			<tbody>
+                <c:forEach items="${employees}" var="user">
+                    <tr>
+                        <th scope="row">${user.id}</th>
+						<td>${user.name}</td>
+						<td>${user.gender=="MALE"?"男":"女"}</td>
+						<td>${user.dept}</td>
+						<td>${user.phone}</td>
+						<td><a href="/employee/getById?id=${user.id}">查看详情</a></td>
+                    </tr>
+                </c:forEach>
+			</tbody>
+		</table>
+	</body>
+</html>
