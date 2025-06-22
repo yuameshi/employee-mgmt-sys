@@ -1,6 +1,8 @@
 package com.example.employee.mgmt.system.controller;
 
 import com.example.employee.mgmt.system.entity.Employee;
+import com.example.employee.mgmt.system.service.DepartmentService;
+import com.example.employee.mgmt.system.service.DepartmentServiceImpl;
 import com.example.employee.mgmt.system.service.EmployeeService;
 import com.example.employee.mgmt.system.service.EmployeeServiceImpl;
 
@@ -14,6 +16,7 @@ import java.util.Map;
 @WebServlet("/employee/*")
 public class EmployeeServlet extends BaseServlet {
 	EmployeeService employeeService = new EmployeeServiceImpl();
+	DepartmentService departmentService = new DepartmentServiceImpl();
 
 	/**
 	 * 根据用户名和密码查询数据库中的用户，无返回用户则返回null
@@ -33,6 +36,11 @@ public class EmployeeServlet extends BaseServlet {
 			return;
 		}
 		request.setAttribute("employee", employee);
+		// 获取部门信息
+		if (employee.getDept() != null) {
+			request.setAttribute("department", departmentService.getDepartmentById(employee.getDept()));
+			System.out.println(departmentService.getDepartmentById(employee.getDept()));
+		}
 		request.getRequestDispatcher("/employeeDetail.jsp").forward(request, response);
 	}
 }

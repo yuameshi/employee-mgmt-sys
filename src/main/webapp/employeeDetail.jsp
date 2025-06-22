@@ -79,7 +79,7 @@
 				</tr>
 				<tr>
 					<td>部门</td>
-					<td>${employee.dept}</td>
+					<td>${department.name}</td>
 				</tr>
 				<tr>
 					<td>招聘日期</td>

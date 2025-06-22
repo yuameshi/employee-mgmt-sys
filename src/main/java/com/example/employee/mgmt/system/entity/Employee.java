@@ -10,7 +10,7 @@ public class Employee {
     private EmployeeSex gender;
     private String phone;
     private String email;
-    private String dept;
+    private Long dept;
     private Date hireDate;
     private Date createTime;
 
@@ -22,7 +22,7 @@ public class Employee {
     public Employee() {
     }
 
-    public Employee(Long id, String name, String password, EmployeeSex gender, String phone, String email, String dept,
+    public Employee(Long id, String name, String password, EmployeeSex gender, String phone, String email, Long dept,
             Date hireDate, Date createTime) {
         this.id = id;
         this.name = name;
@@ -83,11 +83,11 @@ public class Employee {
         this.email = email;
     }
 
-    public String getDept() {
+    public Long getDept() {
         return dept;
     }
 
-    public void setDept(String dept) {
+    public void setDept(Long dept) {
         this.dept = dept;
     }
 
