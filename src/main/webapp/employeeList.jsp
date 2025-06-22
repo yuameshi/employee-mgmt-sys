@@ -52,6 +52,7 @@
 			</select>
 			<label for="department">部门:</label>
 			<select id="department" name="department">
+				<option value="">全部</option>
                 <c:forEach items="${depts}" var="dept">
 					<option value="${dept.deptId}">${dept.name}</option>
 				</c:forEach>
