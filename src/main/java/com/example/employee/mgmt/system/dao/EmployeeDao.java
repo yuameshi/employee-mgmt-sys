@@ -10,8 +10,12 @@ public class EmployeeDao extends BaseDao {
 
 	public Employee findById(Long id) {
 		BeanPropertyRowMapper<Employee> rowMapper = new BeanPropertyRowMapper<>(Employee.class);
-		String sql = "SELECT * FROM employees WHERE id = ? LIMIT 1";
-		return jdbcTemplate.queryForObject(sql, rowMapper, id);
+		try {
+			String sql = "SELECT * FROM employees WHERE id = ? LIMIT 1";
+			return jdbcTemplate.queryForObject(sql, rowMapper, id);
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 	public List<Employee> findBySex(Employee.EmployeeSex sex) {
@@ -22,7 +26,7 @@ public class EmployeeDao extends BaseDao {
 
 	public Employee findByDeptId(Long deptId) {
 		BeanPropertyRowMapper<Employee> rowMapper = new BeanPropertyRowMapper<>(Employee.class);
-		String sql = "SELECT * FROM employees WHERE dept_id = ?";
+		String sql = "SELECT * FROM employees WHERE dept = ?";
 		return jdbcTemplate.queryForObject(sql, rowMapper, deptId);
 	}
 
