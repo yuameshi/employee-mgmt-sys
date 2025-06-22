@@ -4,8 +4,6 @@ import com.example.employee.mgmt.system.dao.EmployeeDao;
 import com.example.employee.mgmt.system.entity.Employee;
 
 public class EmployeeServiceImpl implements EmployeeService {
-
-	// Assuming you have an EmployeeDao instance injected or created
 	private EmployeeDao employeeDao;
 
 	public EmployeeServiceImpl() {

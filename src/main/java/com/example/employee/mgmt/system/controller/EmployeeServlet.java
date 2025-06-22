@@ -1,5 +1,6 @@
 package com.example.employee.mgmt.system.controller;
 
+import com.example.employee.mgmt.system.entity.Department;
 import com.example.employee.mgmt.system.entity.Employee;
 import com.example.employee.mgmt.system.service.DepartmentService;
 import com.example.employee.mgmt.system.service.DepartmentServiceImpl;
@@ -11,7 +12,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
+import com.alibaba.fastjson.JSON;
 
 @WebServlet("/employee/*")
 public class EmployeeServlet extends BaseServlet {
@@ -42,5 +45,21 @@ public class EmployeeServlet extends BaseServlet {
 			System.out.println(departmentService.getDepartmentById(employee.getDept()));
 		}
 		request.getRequestDispatcher("/employeeDetail.jsp").forward(request, response);
+	}
+
+	/*
+	 * 获取全部部门信息
+	 */
+	public void getAllDepartments(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
+		List<Department> depts = departmentService.getAllDepartments();
+
+		response.setContentType("application/json;charset=UTF-8");
+		if (depts == null || depts.isEmpty()) {
+			response.getWriter().write("[]");
+		} else {
+			String json = JSON.toJSONString(depts);
+			response.getWriter().write(json);
+		}
 	}
 }
