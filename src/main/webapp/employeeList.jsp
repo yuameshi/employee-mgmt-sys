@@ -64,6 +64,7 @@
 		<table>
 			<thead>
 				<tr>
+					<th>ID</th>
 					<th>姓名</th>
 					<th>性别</th>
 					<th>部门</th>
@@ -77,7 +78,13 @@
                         <th scope="row">${user.id}</th>
 						<td>${user.name}</td>
 						<td>${user.gender=="MALE"?"男":"女"}</td>
-						<td>${user.dept}</td>
+						<td>
+							<c:forEach items="${depts}" var="dept">
+								<c:if test="${dept.deptId == user.dept}">
+									${dept.name}
+								</c:if>
+							</c:forEach>
+						</td>
 						<td>${user.phone}</td>
 						<td><a href="/employee/getById?id=${user.id}">查看详情</a></td>
                     </tr>
