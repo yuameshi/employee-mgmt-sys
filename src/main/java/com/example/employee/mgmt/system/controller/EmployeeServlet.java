@@ -66,6 +66,9 @@ public class EmployeeServlet extends BaseServlet {
 
 	public void filter(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
+		// 设置部门列表
+		List<Department> depts = departmentService.getAllDepartments();
+		request.setAttribute("depts", depts);
 		Map<String, String> param = getParam(request);
 		String deptId = param.get("department");
 		String name = param.get("name");
