@@ -243,4 +243,106 @@ public class EmployeeServlet extends BaseServlet {
 			}
 		}
 	}
+
+	public void addEmployee(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
+		// 获取当前用户等级
+		if (loginUser.getRole() != User.UserRole.ADMIN) {
+			// 如果不是管理员则跳转到403页面
+			request.setAttribute("title", "访问拒绝");
+			request.setAttribute("msg", "没有权限执行此操作");
+			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+			request.getRequestDispatcher("/error.jsp").forward(request, response);
+			return;
+		}
+		// 获取所有部门信息
+		List<Department> depts = departmentService.getAllDepartments();
+		request.setAttribute("depts", depts);
+		request.getRequestDispatcher("/addEmployee.jsp").forward(request, response);
+	}
+
+	public void addEmployeeSubmit(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
+		// 获取当前用户等级
+		if (loginUser.getRole() != User.UserRole.ADMIN) {
+			// 如果不是管理员则跳转到403页面
+			request.setAttribute("title", "访问拒绝");
+			request.setAttribute("msg", "没有权限执行此操作");
+			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+			request.getRequestDispatcher("/error.jsp").forward(request, response);
+			return;
+		}
+		Map<String, String> param = getParam(request);
+		String name = param.get("name");
+		String phone = param.get("phone");
+		String gender = param.get("gender");
+		String email = param.get("email");
+		String deptId = param.get("dept");
+		String hireDate = param.get("hireDate");
+		if ((name == null || name.isEmpty())
+				|| (phone == null || phone.isEmpty())
+				// 还要判断是否是合规的性别
+				|| (gender == null || gender.isEmpty())
+				|| (email == null || email.isEmpty())
+				|| (deptId == null || deptId.isEmpty())
+				|| (hireDate == null || hireDate.isEmpty())) {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			request.setAttribute("title", "请求错误");
+			request.setAttribute("msg", "请填写完整的员工信息");
+			request.getRequestDispatcher("/error.jsp").forward(request, response);
+		} else {
+			// 创建员工对象
+			Employee employee = new Employee();
+			employee.setName(name);
+			employee.setPhone(phone);
+			if (gender.equals("MALE")) {
+				employee.setGender(Employee.EmployeeSex.MALE);
+			} else if (gender.equals("FEMALE")) {
+				employee.setGender(Employee.EmployeeSex.FEMALE);
+			} else {
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				request.setAttribute("title", "请求错误");
+				request.setAttribute("msg", "性别格式不正确");
+				request.getRequestDispatcher("/error.jsp").forward(request, response);
+				return;
+			}
+			employee.setEmail(email);
+			employee.setDept(Long.parseLong(deptId));
+			// Convert hireDate String to java.util.Date
+			try {
+				java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+				java.util.Date parsedHireDate = sdf.parse(hireDate);
+				employee.setHireDate(parsedHireDate);
+			} catch (java.text.ParseException e) {
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				request.setAttribute("title", "请求错误");
+				request.setAttribute("msg", "入职日期格式不正确");
+				request.getRequestDispatcher("/error.jsp").forward(request, response);
+				return;
+			}
+			// 插入员工信息
+			try {
+				employeeService.addEmployee(employee);
+				// 如果插入成功则查询员工ID
+				Employee insertedEmployee = employeeService.findByPhone(phone);
+				if (insertedEmployee == null) {
+					// 如果没有找到插入的员工则跳转到404页面
+					request.setAttribute("title", "服务器错误");
+					request.setAttribute("msg", "添加员工失败，请稍后再试");
+					response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+					request.getRequestDispatcher("/error.jsp").forward(request, response);
+					return;
+				}
+				// 插入成功后跳转到员工详情页面
+				response.sendRedirect("/employee/getById?id=" + insertedEmployee.getId());
+			} catch (Exception e) {
+				e.printStackTrace();
+				// 如果插入失败则跳转到404页面
+				request.setAttribute("title", "服务器错误");
+				request.setAttribute("msg", "添加员工失败，请稍后再试");
+				response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+				request.getRequestDispatcher("/error.jsp").forward(request, response);
+			}
+		}
+	}
 }

@@ -18,4 +18,6 @@ public interface EmployeeService {
 	List<Employee> findByDeptId(Long deptId);
 
 	void delete(Long id);
+
+	void addEmployee(Employee employee);
 }

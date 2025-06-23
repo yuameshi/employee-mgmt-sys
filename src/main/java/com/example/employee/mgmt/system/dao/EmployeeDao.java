@@ -1,5 +1,6 @@
 package com.example.employee.mgmt.system.dao;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -56,5 +57,23 @@ public class EmployeeDao extends BaseDao {
 	public void deleteById(Long id) {
 		String sql = "DELETE FROM employees WHERE id = ?";
 		jdbcTemplate.update(sql, id);
+	}
+
+	public void insert(Employee employee) {
+		String sql = "INSERT INTO employees (name, gender, phone, email, dept, hire_date, create_time) " +
+				"VALUES (?, ?, ?, ?, ?, ?, ?)";
+		// format date to string
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String hireDate = sdf.format(employee.getHireDate());
+		SimpleDateFormat sdfWithTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+		String currentDate = sdfWithTime.format(new java.util.Date());
+		jdbcTemplate.update(sql,
+				employee.getName(),
+				employee.getGender().toString(),
+				employee.getPhone(),
+				employee.getEmail(),
+				employee.getDept(),
+				hireDate,
+				currentDate);
 	}
 }
