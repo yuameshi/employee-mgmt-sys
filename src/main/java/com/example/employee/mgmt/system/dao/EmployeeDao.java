@@ -52,4 +52,9 @@ public class EmployeeDao extends BaseDao {
 		String sql = "SELECT * FROM employees WHERE dept = ?";
 		return jdbcTemplate.query(sql, rowMapper, deptId);
 	}
+
+	public void deleteById(Long id) {
+		String sql = "DELETE FROM employees WHERE id = ?";
+		jdbcTemplate.update(sql, id);
+	}
 }

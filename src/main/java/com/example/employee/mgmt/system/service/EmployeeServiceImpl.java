@@ -41,4 +41,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public List<Employee> findByDeptId(Long deptId) {
 		return employeeDao.findByDeptId(deptId);
 	}
+
+	@Override
+	public void delete(Long id) {
+		employeeDao.deleteById(id);
+	}
 }

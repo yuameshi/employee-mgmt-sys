@@ -16,4 +16,6 @@ public interface EmployeeService {
 	List<Employee> findByGender(String sex);
 
 	List<Employee> findByDeptId(Long deptId);
+
+	void delete(Long id);
 }

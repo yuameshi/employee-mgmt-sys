@@ -2,6 +2,7 @@ package com.example.employee.mgmt.system.controller;
 
 import com.example.employee.mgmt.system.entity.Department;
 import com.example.employee.mgmt.system.entity.Employee;
+import com.example.employee.mgmt.system.entity.User;
 import com.example.employee.mgmt.system.service.DepartmentService;
 import com.example.employee.mgmt.system.service.DepartmentServiceImpl;
 import com.example.employee.mgmt.system.service.EmployeeService;
@@ -203,5 +204,38 @@ public class EmployeeServlet extends BaseServlet {
 		request.setAttribute("name", name);
 		// 不用设置手机因为手机号是直接跳转到详情页的
 		request.getRequestDispatcher("/employeeList.jsp").forward(request, response);
+	}
+
+	public void deleteEmployee(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
+		// 获取当前用户等级
+		if (loginUser.getRole() != User.UserRole.ADMIN) {
+			// 如果不是管理员则跳转到403页面
+			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+			request.setAttribute("msg", "没有权限执行此操作");
+			request.getRequestDispatcher("/403.jsp").forward(request, response);
+			return;
+		}
+		Map<String, String> param = getParam(request);
+		String id = param.get("id");
+		if (id == null || id.isEmpty()) {
+			// 如果没有id则跳转到404页面
+			request.setAttribute("msg", "未找到该员工信息");
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			request.getRequestDispatcher("/404.jsp").forward(request, response);
+			return;
+		} else {
+			// 删除员工
+			try {
+				employeeService.delete(Long.parseLong(id));
+				// 删除成功后跳转到员工列表页面
+				response.sendRedirect("/employee/filter");
+			} catch (Exception e) {
+				// 如果删除失败则跳转到404页面
+				request.setAttribute("msg", "删除员工失败或未找到该员工信息，请稍后再试");
+				response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+				request.getRequestDispatcher("/404.jsp").forward(request, response);
+			}
+		}
 	}
 }

@@ -97,7 +97,10 @@
 								</c:forEach>
 							</td>
 							<td>${user.phone}</td>
-							<td><a href="/employee/getById?id=${user.id}">查看详情</a></td>
+							<td>
+								<a href="/employee/getById?id=${user.id}">查看详情</a>
+								<a href="/employee/deleteEmployee?id=${user.id}">删除该员工</a>
+							</td>
                 	    </tr>
                 	</c:forEach>
 				</c:if>
