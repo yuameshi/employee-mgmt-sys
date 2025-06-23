@@ -2,11 +2,6 @@ package com.example.employee.mgmt.system.entity;
 
 import java.util.Date;
 
-enum UserRole {
-    ADMIN,
-    USER,
-};
-
 public class User {
 
     private Long userId;
@@ -14,6 +9,11 @@ public class User {
     private String password;
     private UserRole role;
     private Date lastLoginTime;
+
+    public enum UserRole {
+        ADMIN,
+        USER,
+    };
 
     public User() {
     }
