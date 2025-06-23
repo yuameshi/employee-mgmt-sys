@@ -32,7 +32,6 @@ public class BaseServlet extends HttpServlet {
         // 具体的servlet
         Class<?> targetClass = this.getClass();
 
-        System.out.println(this); // ?
         try {
             // 通过截取uri(方法名),反射出对应的方法 getMethod(方法名,参数列表...) 根据方法名和方法调用需要的参数列表类型来找方法执行
             Method method = targetClass.getMethod(uri, HttpServletRequest.class, HttpServletResponse.class);

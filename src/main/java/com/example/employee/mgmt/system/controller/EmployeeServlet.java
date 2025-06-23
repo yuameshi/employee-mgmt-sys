@@ -46,7 +46,6 @@ public class EmployeeServlet extends BaseServlet {
 		// 获取部门信息
 		if (employee.getDept() != null) {
 			request.setAttribute("department", departmentService.getDepartmentById(employee.getDept()));
-			System.out.println(departmentService.getDepartmentById(employee.getDept()));
 		}
 		request.getRequestDispatcher("/employeeDetail.jsp").forward(request, response);
 	}

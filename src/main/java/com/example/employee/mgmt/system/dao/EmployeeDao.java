@@ -38,7 +38,6 @@ public class EmployeeDao extends BaseDao {
 	public List<Employee> findByName(String name) {
 		BeanPropertyRowMapper<Employee> rowMapper = new BeanPropertyRowMapper<>(Employee.class);
 		String sql = "SELECT * FROM employees WHERE name like \"" + ("%" + name + "%") + "\"";
-		System.out.println(sql);
 		return jdbcTemplate.query(sql, rowMapper);
 	}
 
