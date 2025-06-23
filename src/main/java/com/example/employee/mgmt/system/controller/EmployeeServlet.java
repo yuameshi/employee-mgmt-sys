@@ -13,6 +13,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -47,6 +48,11 @@ public class EmployeeServlet extends BaseServlet {
 		if (employee.getDept() != null) {
 			request.setAttribute("department", departmentService.getDepartmentById(employee.getDept()));
 		}
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		// 设置日期格式
+		request.setAttribute("hireDateStr", sdf.format(employee.getHireDate()));
+		// 设置录入日期
+		request.setAttribute("createDateStr", sdf.format(employee.getCreateTime()));
 		request.getRequestDispatcher("/employeeDetail.jsp").forward(request, response);
 	}
 

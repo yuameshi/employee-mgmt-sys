@@ -83,11 +83,11 @@
 				</tr>
 				<tr>
 					<td>招聘日期</td>
-					<td>${employee.hireDate}</td>
+					<td>${hireDateStr}</td>
 				</tr>
 				<tr>
 					<td>创建时间</td>
-					<td>${employee.createTime}</td>
+					<td>${createDateStr}</td>
 				</tr>
 			</tbody>
 			<tfoot>
