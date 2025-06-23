@@ -6,7 +6,6 @@ public class Employee {
 
     private Long id;
     private String name;
-    private String password;
     private EmployeeSex gender;
     private String phone;
     private String email;
@@ -22,11 +21,10 @@ public class Employee {
     public Employee() {
     }
 
-    public Employee(Long id, String name, String password, EmployeeSex gender, String phone, String email, Long dept,
+    public Employee(Long id, String name, EmployeeSex gender, String phone, String email, Long dept,
             Date hireDate, Date createTime) {
         this.id = id;
         this.name = name;
-        this.password = password;
         this.gender = gender;
         this.phone = phone;
         this.email = email;
@@ -49,14 +47,6 @@ public class Employee {
 
     public void setName(String username) {
         this.name = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public EmployeeSex getGender() {
