@@ -36,8 +36,10 @@ public class EmployeeServlet extends BaseServlet {
 		response.setContentType("application/json;charset=utf8");
 		Employee employee = employeeService.findById(Long.parseLong(id));
 		if (employee == null) {
+			request.setAttribute("title", "找不到对象");
 			request.setAttribute("msg", "未找到该员工信息");
-			request.getRequestDispatcher("/404.jsp").forward(request, response);
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			request.getRequestDispatcher("/error.jsp").forward(request, response);
 			return;
 		}
 		request.setAttribute("employee", employee);
@@ -211,18 +213,20 @@ public class EmployeeServlet extends BaseServlet {
 		// 获取当前用户等级
 		if (loginUser.getRole() != User.UserRole.ADMIN) {
 			// 如果不是管理员则跳转到403页面
-			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+			request.setAttribute("title", "访问拒绝");
 			request.setAttribute("msg", "没有权限执行此操作");
-			request.getRequestDispatcher("/403.jsp").forward(request, response);
+			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+			request.getRequestDispatcher("/error.jsp").forward(request, response);
 			return;
 		}
 		Map<String, String> param = getParam(request);
 		String id = param.get("id");
 		if (id == null || id.isEmpty()) {
 			// 如果没有id则跳转到404页面
+			request.setAttribute("title", "找不到对象");
 			request.setAttribute("msg", "未找到该员工信息");
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			request.getRequestDispatcher("/404.jsp").forward(request, response);
+			request.getRequestDispatcher("/error.jsp").forward(request, response);
 			return;
 		} else {
 			// 删除员工
@@ -232,9 +236,10 @@ public class EmployeeServlet extends BaseServlet {
 				response.sendRedirect("/employee/filter");
 			} catch (Exception e) {
 				// 如果删除失败则跳转到404页面
+				request.setAttribute("title", "找不到对象");
 				request.setAttribute("msg", "删除员工失败或未找到该员工信息，请稍后再试");
 				response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-				request.getRequestDispatcher("/404.jsp").forward(request, response);
+				request.getRequestDispatcher("/error.jsp").forward(request, response);
 			}
 		}
 	}
