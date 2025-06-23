@@ -93,7 +93,7 @@
 			<tfoot>
 				<tr>
 					<th scope="row" colspan="2">
-						<a href="javascript:history.back();">返回员工列表</a>
+						<a href="/employee/filter">返回员工列表</a>
 					</th>
 				</tr>
 			</tfoot>
