@@ -39,6 +39,7 @@
 			}
 
 			td:last-of-type {
+				padding: 8px 45px;
 				text-align: center;
 			}
 
