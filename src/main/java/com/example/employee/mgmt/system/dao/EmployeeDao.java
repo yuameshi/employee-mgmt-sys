@@ -76,4 +76,19 @@ public class EmployeeDao extends BaseDao {
 				hireDate,
 				currentDate);
 	}
+
+	public void update(Employee employee) {
+		String sql = "UPDATE employees SET name = ?, gender = ?, phone = ?, email = ?, dept = ?, hire_date = ? WHERE id = ?";
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String hireDate = sdf.format(employee.getHireDate());
+		jdbcTemplate.update(sql,
+				employee.getName(),
+				employee.getGender().toString(),
+				employee.getPhone(),
+				employee.getEmail(),
+				employee.getDept(),
+				hireDate,
+				employee.getId());
+	}
+
 }
