@@ -278,15 +278,13 @@ public class EmployeeServlet extends BaseServlet {
 			return;
 		}
 		Map<String, String> param = getParam(request);
-		String id = param.get("id");
 		String name = param.get("name");
 		String phone = param.get("phone");
 		String gender = param.get("gender");
 		String email = param.get("email");
 		String deptId = param.get("dept");
 		String hireDate = param.get("hireDate");
-		if ((id == null || id.isEmpty())
-				|| (name == null || name.isEmpty())
+		if ((name == null || name.isEmpty())
 				|| (phone == null || phone.isEmpty())
 				// 还要判断是否是合规的性别
 				|| (gender == null || gender.isEmpty())
@@ -300,7 +298,6 @@ public class EmployeeServlet extends BaseServlet {
 		} else {
 			// 创建员工对象
 			Employee employee = new Employee();
-			employee.setId(Long.parseLong(id));
 			employee.setName(name);
 			employee.setPhone(phone);
 			if (gender.equals("MALE")) {
@@ -435,6 +432,7 @@ public class EmployeeServlet extends BaseServlet {
 			request.getRequestDispatcher("/error.jsp").forward(request, response);
 			return;
 		}
+		employee.setId(Long.parseLong(id));
 		employee.setName(name);
 		employee.setPhone(phone);
 		if (gender.equals("MALE")) {
