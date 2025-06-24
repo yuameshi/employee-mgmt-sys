@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `employees` (
   `email` varchar(64) NOT NULL,
   `dept` int(11) unsigned NOT NULL,
   `hire_date` date NOT NULL,
-  `create_time` timestamp NOT NULL DEFAULT unix_timestamp(),
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP(),
   PRIMARY KEY (`id`),
   KEY `FK_employees_departments` (`dept`),
   CONSTRAINT `FK_employees_departments` FOREIGN KEY (`dept`) REFERENCES `departments` (`dept_id`) ON UPDATE CASCADE
@@ -98,7 +98,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `username` varchar(50) NOT NULL,
   `password` varchar(50) NOT NULL,
   `role` enum('ADMIN','USER') NOT NULL DEFAULT 'USER',
-  `last_login_time` datetime NOT NULL DEFAULT current_timestamp(),
+  `last_login_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP(),
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `username` (`username`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
