@@ -2,13 +2,19 @@
 
 开发用环境，若自身部署时环境不同应视情况修改依赖和代码
 
-> Java: 17.0.10-ms
+> Java 版本：openjdk 17.0.10-ms
 >
-> Apache Maven: 3.9.9
+> 依赖管理：Apache Maven 3.9.9
 >
-> 数据库: MiraiDB 15.1
+> 数据库: MariaDB 15.1/Distrib 10.11.5 （代码与 MySQL 8 兼容）
 >
-> Apache Tomcat: 11.0.5
+> 服务器：Apache Tomcat 11.0.5
+
+# 预编译文件
+
+本项目已预编译为二进制文件，位于`target`目录下，详情请看[运行及部署](#运行及部署)部分。
+
+使用预编译文件需要修改`target/employee-mgmt-sys/WEB-INF/classes/jdbc.properties`文件中的数据库配置且**不能使用 war 包（除非你能改数据库配置）**，以适应自身的数据库环境。
 
 # 安装依赖
 
@@ -91,9 +97,8 @@ jdbc.url=jdbc:mysql://localhost:3306/employee?useUnicode=true&characterEncoding=
 ## 权限与安全
 
 -   系统通过自定义的 LoginFilter 实现登录拦截，所有受限资源（除登录、首页等）仅允许已登录用户访问，未登录用户会被自动重定向到登录页。
--   登录用户信息存储于 Session，所有敏感操作（如员工信息修改、删除）均需管理员权限。
--   对输入参数进行校验，防止 SQL 注入和非法数据。
--   统一异常处理，保证系统稳定性和用户体验。
+-   登录用户信息存储于 Session，所有敏感操作（如员工信息增加、修改、删除）均需管理员权限。
+-   附带部分异常处理，保证系统稳定性和用户体验。
 
 # 员工筛选（filter）功能实现
 
