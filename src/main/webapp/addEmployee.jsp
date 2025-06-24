@@ -24,7 +24,7 @@
 			</div>
 			<div>
 				<label for="phone">电话:</label>
-				<input type="text" id="phone" name="phone" required />
+				<input type="number" id="phone" name="phone" required />
 			</div>
 			<div>
 				<label for="gender">性别:</label>

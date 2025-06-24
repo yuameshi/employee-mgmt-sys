@@ -25,7 +25,7 @@
 			</div>
 			<div>
 				<label for="phone">电话:</label>
-				<input type="text" id="phone" name="phone" value="${employee.phone}" required />
+				<input type="number" id="phone" name="phone" value="${employee.phone}" required />
 			</div>
 			<div>
 				<label for="gender">性别:</label>
