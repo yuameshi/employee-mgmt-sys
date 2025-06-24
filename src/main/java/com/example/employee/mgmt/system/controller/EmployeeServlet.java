@@ -13,8 +13,10 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import com.alibaba.fastjson.JSON;
@@ -312,13 +314,28 @@ public class EmployeeServlet extends BaseServlet {
 				return;
 			}
 			employee.setEmail(email);
+			// 获取全部部门ID并检查是否为合法部门ID
+			List<Department> depts = departmentService.getAllDepartments();
+			boolean validDept = false;
+			for (Department dept : depts) {
+				if (dept.getDeptId().toString().equals(deptId)) {
+					validDept = true;
+					break;
+				}
+			}
+			if (validDept == false) {
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				request.setAttribute("title", "请求错误");
+				request.setAttribute("msg", "部门ID不合法");
+				request.getRequestDispatcher("/error.jsp").forward(request, response);
+				return;
+			}
 			employee.setDept(Long.parseLong(deptId));
-			// Convert hireDate String to java.util.Date
 			try {
-				java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
-				java.util.Date parsedHireDate = sdf.parse(hireDate);
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				Date parsedHireDate = sdf.parse(hireDate);
 				employee.setHireDate(parsedHireDate);
-			} catch (java.text.ParseException e) {
+			} catch (ParseException e) {
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 				request.setAttribute("title", "请求错误");
 				request.setAttribute("msg", "入职日期格式不正确");
@@ -388,7 +405,7 @@ public class EmployeeServlet extends BaseServlet {
 		request.setAttribute("employee", employee);
 		// 设置日期
 		request.setAttribute("hireDateStr",
-				new java.text.SimpleDateFormat("yyyy-MM-dd").format(employee.getHireDate()));
+				new SimpleDateFormat("yyyy-MM-dd").format(employee.getHireDate()));
 		request.getRequestDispatcher("/editEmployee.jsp").forward(request, response);
 	}
 
@@ -447,12 +464,28 @@ public class EmployeeServlet extends BaseServlet {
 			return;
 		}
 		employee.setEmail(email);
+		// 获取全部部门ID并检查是否为合法部门ID
+		List<Department> depts = departmentService.getAllDepartments();
+		boolean validDept = false;
+		for (Department dept : depts) {
+			if (dept.getDeptId().toString().equals(deptId)) {
+				validDept = true;
+				break;
+			}
+		}
+		if (validDept == false) {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			request.setAttribute("title", "请求错误");
+			request.setAttribute("msg", "部门ID不合法");
+			request.getRequestDispatcher("/error.jsp").forward(request, response);
+			return;
+		}
 		employee.setDept(Long.parseLong(deptId));
 		try {
-			java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
-			java.util.Date parsedHireDate = sdf.parse(hireDate);
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			Date parsedHireDate = sdf.parse(hireDate);
 			employee.setHireDate(parsedHireDate);
-		} catch (java.text.ParseException e) {
+		} catch (ParseException e) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			request.setAttribute("title", "请求错误");
 			request.setAttribute("msg", "入职日期格式不正确");
