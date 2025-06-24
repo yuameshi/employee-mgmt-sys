@@ -44,4 +44,12 @@ public class UserServlet extends BaseServlet {
 		request.setAttribute("msg", "账号或密码错误");
 		request.getRequestDispatcher("/login.jsp").forward(request, response);
 	}
+
+	public void logout(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		// 清除session
+		HttpSession session = request.getSession();
+		session.invalidate();
+		// 重定向到登录页
+		response.sendRedirect("/login.jsp");
+	}
 }

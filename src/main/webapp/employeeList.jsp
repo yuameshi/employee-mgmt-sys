@@ -66,7 +66,10 @@
 			<input type="text" id="phone" placeholder="此选项将忽略前方两个选项" name="phone" />
 			<button type="submit">筛选</button>
 		</form>
-		<a href="/employee/addEmployee" style="margin-bottom: 20px;">添加新员工</a>
+		<div style="margin-bottom: 20px;display: flex; gap: 20px;">
+			<a href="/employee/addEmployee">添加新员工</a>
+			<a href="/user/logout">退出登录</a>
+		</div>
 		<table>
 			<thead>
 				<tr>
