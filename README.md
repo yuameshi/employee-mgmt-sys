@@ -1,6 +1,6 @@
 # 开发环境
 
-开发用环境，若自身部署时环境不同应视情况修改依赖和代码
+开发者所用环境，若自身部署时环境不同应视情况修改依赖和代码
 
 > Java 版本：openjdk 17.0.10-ms
 >
@@ -82,7 +82,7 @@ jdbc.url=jdbc:mysql://localhost:3306/employee?useUnicode=true&characterEncoding=
 >
 > 密码：user
 >
-> 权限：此账户为普通用户，尽可以执行查询操作
+> 权限：此账户为普通用户，仅可以执行查询操作
 
 # 设计思路
 
