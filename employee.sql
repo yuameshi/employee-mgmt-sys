@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS `employees` (
   `create_time` timestamp NOT NULL DEFAULT unix_timestamp(),
   PRIMARY KEY (`id`),
   KEY `FK_employees_departments` (`dept`),
-  CONSTRAINT `FK_employees_departments` FOREIGN KEY (`dept`) REFERENCES `departments` (`dept_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `FK_employees_departments` FOREIGN KEY (`dept`) REFERENCES `departments` (`dept_id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 正在导出表  employee.employees 的数据：~30 rows (大约)
