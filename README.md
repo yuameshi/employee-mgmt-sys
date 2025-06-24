@@ -6,7 +6,7 @@
 >
 > Apache Maven: 3.9.9
 >
-> MySQL: MiraiDB 15.1
+> 数据库: MiraiDB 15.1
 >
 > Apache Tomcat: 11.0.5
 
