@@ -62,9 +62,17 @@
 					</c:if>
 				</c:forEach>
 			</select>
-			<label for="phone">电话:</label>
-			<input type="text" id="phone" placeholder="此选项将忽略前方两个选项" name="phone" />
 			<button type="submit">筛选</button>
+		</form>
+		<form action="/employee/getById" method="get">
+			<label for="id">跳转到员工ID:</label>
+			<input type="number" id="id" name="id" />
+			<button type="submit">跳转到用户</button>
+		</form>
+		<form action="/employee/filter" method="get">
+			<label for="phone">根据电话号码精确查询:</label>
+			<input type="number" id="phone" name="phone" />
+			<button type="submit">跳转到用户</button>
 		</form>
 		<div style="margin-bottom: 20px;display: flex; gap: 20px;">
 			<a href="/employee/addEmployee">添加新员工</a>
